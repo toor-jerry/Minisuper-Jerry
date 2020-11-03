@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!
+{% endblock %}
+
+{% block body %}
+	{# Formulario #}
+    {{ form_start(form) }}
+    {{ form_end(form) }}
+
+	<a a href="{{ path('productos') }}">Productos</a>
+{% endblock %}

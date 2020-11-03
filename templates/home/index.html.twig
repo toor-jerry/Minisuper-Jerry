@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!
+{% endblock %}
+
+{% block body %}
+	{# comentarios #}
+	{% set mivar = 's' %}
+	{{ mivar }}
+	{{ 'LOWER' | lower }}
+	<a a href="{{ path('productos') }}">Productos</a>
+{% endblock %}
