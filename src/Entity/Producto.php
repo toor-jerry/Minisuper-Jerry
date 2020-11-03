@@ -72,6 +72,11 @@ class Producto
      * @ORM\JoinColumn(nullable=true)
      */
     private $almacen;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imagenNombre;
     
     public function __contruct(
         string $nombre = null, 
@@ -162,6 +167,18 @@ class Producto
     public function setAlmacen(?Almacen $almacen): self
     {
         $this->almacen = $almacen;
+
+        return $this;
+    }
+
+    public function getImagenNombre(): ?string
+    {
+        return $this->imagenNombre;
+    }
+
+    public function setImagenNombre(?string $imagenNombre): self
+    {
+        $this->imagenNombre = $imagenNombre;
 
         return $this;
     }
