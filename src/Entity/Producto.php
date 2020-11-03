@@ -93,7 +93,10 @@ class Producto
         $this->codigo = $codigo;
         $this->almacen = $almacen;
     }
-
+    public function __toString(): string
+    {
+        return $this->nombre.'; '.$this->descripcion. ' ';
+    }
     public function getId(): ?int
     {
         return $this->id;

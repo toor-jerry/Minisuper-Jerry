@@ -56,6 +56,10 @@ class Almacen
         $this->descripcion = $descripcion;
         $this->productos = new ArrayCollection();
     }
+    public function __toString(): string
+    {
+        return $this->codigo.' - '.$this->descripcion. ' ';
+    }
 
     public function getId(): ?int
     {
