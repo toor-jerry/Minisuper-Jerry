@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+
+	{% if producto %}
+	    {% if producto.imagenNombre %}
+		    <img src="{{ asset('img/' ~ producto.imagenNombre) }}"/>
+        {% endif %}
+
+		<h4>{{ producto.nombre }}</h4>
+		<small>
+			{{ producto.descripcion }}
+		</small>
+
+		<p>{{ producto.precio }}</p>
+    {% else %}
+	<div>No existe el producto.</div>
+{% endif %}
+{% endblock %}

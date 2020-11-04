@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Producto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Producto|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +15,23 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProductoRepository extends ServiceEntityRepository
 {
+    public const PAGINADOR_POR_PAGINA = 5;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Producto::class);
+    }
+
+    public function getProductoPaginador(int $offset): Paginator
+    {
+        $query = $this->createQueryBuilder('c')
+            ->orderBy('c.nombre', 'DESC')
+            ->setMaxResults(self::PAGINADOR_POR_PAGINA)
+            ->setFirstResult($offset)
+            ->getQuery()
+        ;
+
+        return new Paginator($query);
     }
 
     // /**

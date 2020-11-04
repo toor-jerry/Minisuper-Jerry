@@ -1,12 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!
+{% block title %}
+	Minisuper | Productos
 {% endblock %}
 
 {% block body %}
-	{# Formulario #}
-    {{ form_start(form) }}
-    {{ form_end(form) }}
+{% if productos|length > 0 %}
+	<div>Contamos con {{ productos|length }} productos.</div>
+	{% for producto in productos %}
+		{% if producto.imagenNombre %}
+		    <img src="{{ asset('img/' ~ producto.imagenNombre) }}"/>
+        {% endif %}
 
-	<a a href="{{ path('productos') }}">Productos</a>
+		<h4>{{ producto.nombre }}</h4>
+		<small>
+			{{ producto.descripcion }}
+		</small>
+
+		<p>{{ producto.precio }}</p>
+		<a href="{{ path('producto', { id: producto.id }) }}">Visualizar</a>
+	{% endfor %}
+
+	{% if previous >= 0 %}
+		<a href="{{ path('productos', { offset: previous }) }}">Previo</a>
+	{% endif %}
+	{% if next < productos|length %}
+		<a href="{{ path('productos', { offset: next }) }}">Siguiente</a>
+	{% endif %}
+{% else %}
+	<div>No existen productos.</div>
+{% endif %}
 {% endblock %}
