@@ -1,0 +1,45 @@
+easy_admin:
+   site_name: 'Minisuper <em style="font-size: 80%;">Jerry.</em>'
+   user:
+        display_name: true
+        display_avatar: true
+   design:
+        brand_color: '#1ABC9C'
+        menu:
+            - { route: 'home', label: 'Back to the website', icon: 'home' }
+            - { entity: 'Productos', label: 'Productos', icon: 'blender' }
+            - { entity: 'Almacen', label: 'Almacén', icon: 'warehouse' }
+            - { entity: 'Usuario', permission: 'ROLE_SUPER_ADMIN', label: 'Usuarios', icon: 'user' }
+
+   entities:
+      Productos:
+        class: App\Entity\Producto
+        list:
+                help: 'Productos existentes.'
+                max_results: 30
+                fields:
+                    - nombre
+                    - descripcion
+                    - { property: 'imagenNombre', type: 'image', base_path: '/img/' }
+                    - { property: 'precio', type: 'number' }
+                    - { property: 'stack', type: 'number' }
+                    - codigo
+                    - almacen
+                sort: ['stack', 'DESC']
+                filters: ['precio', 'stack', 'almacen']
+        edit:
+                help: 'Actualice el producto.'
+                fields:
+                    - nombre
+                    - descripcion
+                    - { property: 'precio', type: 'number' }
+                    - { property: 'stack', type: 'number' }
+                    - codigo
+                    - almacen
+                    - { property: 'imagenNombre', type: 'image', base_path: '/img/' }
+
+      Almacen:
+         class: App\Entity\Almacen
+
+      Usuario:
+         class: App\Entity\Usuario
