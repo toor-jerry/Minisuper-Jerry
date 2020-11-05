@@ -2,26 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\UsuarioRepository;
-use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\AdminRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass=UsuarioRepository::class)
- * 
- *  @ApiResource(
- *     collectionOperations={"get"={"normalization_context"={"groups"="usuario:list"}}, "post"},
- *     itemOperations={"get"={"normalization_context"={"groups"="usuario:item"}}, "put", "delete"},
- *     order={"username"="DESC"},
- *     paginationEnabled=false
- * )
+ * @ORM\Entity(repositoryClass=AdminRepository::class)
+ * @ORM\Table(name="`admin`")
  */
-
-class Usuario implements UserInterface
+class Admin implements UserInterface
 {
     /**
      * @ORM\Id
@@ -32,24 +21,24 @@ class Usuario implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * 
-     * @Groups({"usuario:list", "conference:item"})
      */
     private $username;
 
     /**
      * @ORM\Column(type="json")
-     * 
-     * @Groups({"usuario:list", "conference:item"})
      */
     private $roles = [];
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * @Groups({"usuario:list", "conference:item"})
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      */
     private $password;
+
+    public function __toString(): string
+    {
+        return $this->username;
+    }
 
     public function getId(): ?int
     {
@@ -92,11 +81,6 @@ class Usuario implements UserInterface
         return $this;
     }
 
-    public function __toString(): string
-    {
-        return $this->username;
-    }
-
     /**
      * @see UserInterface
      */
@@ -127,4 +111,5 @@ class Usuario implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }}
+    }
+}
