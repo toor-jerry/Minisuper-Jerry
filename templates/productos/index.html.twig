@@ -1,34 +1,46 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}
 	Minisuper | Productos
 {% endblock %}
 
 {% block body %}
-{% if productos|length > 0 %}
-	<div>Contamos con {{ productos|length }} productos.</div>
-	{% for producto in productos %}
-		{% if producto.imagenNombre %}
-		    <img src="{{ asset('img/' ~ producto.imagenNombre) }}"/>
-        {% endif %}
-
-		<h4>{{ producto.nombre }}</h4>
-		<small>
-			{{ producto.descripcion }}
-		</small>
-		<h4>{{ producto.almacen }}</h4>
-
-		<p>{{ producto.precio }}</p>
-		<a href="{{ path('producto', { id: producto.id }) }}">Visualizar</a>
-	{% endfor %}
-
-	{% if previous >= 0 %}
-		<a href="{{ path('productos', { offset: previous }) }}">Previo</a>
-	{% endif %}
-	{% if next < productos|length %}
-		<a href="{{ path('productos', { offset: next }) }}">Siguiente</a>
-	{% endif %}
-{% else %}
-	<div>No existen productos.</div>
-{% endif %}
-{% endblock %}
+	{% if productos|length > 0 %}
+		<div class="mt-2"><h4>Contamos con <span class="badge badge-warning">{{ productos|length }}</span> productos.</h4></div>
+		<div class="card-columns">
+			{% for producto in productos %}
+					<div class="card">
+						{% if producto.image %}
+							<div class="text-center">
+                                <img src="{{ asset('uploads/images/' ~ producto.image) }}" class="card-img-top mx-auto p-2" alt="{{ producto.nombre }}" style="max-width: 300px;"/>
+                            </div>
+						{% endif %}
+						<div class="card-body">
+							<h2 class="card-title">{{ producto.nombre }}</h2>
+							<p class="card-text">{{ producto.descripcion }}</p>
+							<div class="row">
+								<div class="col">
+									<p class="card-text font-weight-bold">$
+										{{ producto.precio }}</p>
+								</div>
+								<div class="col">
+									<p class="card-text font-weight-bold">Existentes:
+										{{ producto.stack }}</p>
+								</div>
+							</div>
+                            <a href="{{ path('producto', { id: producto.id }) }}">Visualizar</a>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			{% if previous >= 0 %}
+				<a href="{{ path('productos', { offset: previous }) }}">Previo</a>
+			{% endif %}
+			{% if next < productos|length %}
+				<a href="{{ path('productos', { offset: next }) }}">Siguiente</a>
+			{% endif %}
+		{% else %}
+			<div class="text-center mt-5">
+				<h1>No existen productos por el momento...</h1>
+			</div>
+		{% endif %}
+	{% endblock %}

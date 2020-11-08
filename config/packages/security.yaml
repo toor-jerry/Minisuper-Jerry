@@ -10,19 +10,53 @@ security:
             entity:
                 class: App\Entity\Admin
                 property: username
+
+            # jwt: # optional, any user provider can be used
+            #     lexik_jwt:
+            #         class: App\Security\JWTUser
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        
+        api:
+            pattern: ^/api/
+            stateless: true
+            anonymous: true
+            provider: app_user_provider
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+            # provider: jwt 
+            
+        login:
+            pattern:  ^/authentication_token
+            stateless: true
+            anonymous: true
+            json_login:
+                username_path: username
+                password_path: password
+                check_path:               /authentication_token
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+
         main:
             anonymous: true
             lazy: true
-            provider: app_user_provider
             guard:
                 authenticators:
                     - App\Security\AppAuthenticator
             logout:
                 path: app_logout
+            
+            # remember_me:
+            #     secret:   '%kernel.secret%'
+            #     lifetime: 604800 # 1 week in seconds
+            #     path:     /
+                # by default, the feature is enabled by checking a
+                # checkbox in the login form (see below), uncomment the
+                # following line to always enable it.
+                #always_remember_me: true
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -35,5 +69,8 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN] }
+        - { path: ^/authentication_token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/docs, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/graphql, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }

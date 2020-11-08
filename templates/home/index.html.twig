@@ -1,13 +1,18 @@
-{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %} {% block title %}Minisuper-Jerry | Home {% endblock %} {% block body %}
 
-{% block title %}Hello HomeController!
-{% endblock %}
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+    <div class="col-md-8 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal">Minisuper - Jerry</h1>
+        <p class="lead font-weight-normal">Sitio web de venta de productos.</p>
+        <p class="lead font-weight-normal">El sitio cuenta con:</p>
+        <div class="container text-justify w-75">
+            <ul>
+                <li>Panel de administración diseñado con <b>'Easy Admin'</b>.</li>
+                <li>Sección de listado de <a href="{{ path('productos') }}" class="font-weight-bold">Productos</a>.</li>
+                <li>API expuesta con Api-Platform protegida con <b>JWT (JSON Web Tokens)</b>.</li>
+            </ul>
+        </div>
+    </div>
+</div>
 
-{% block body %}
-	{# comentarios #}
-	{% set mivar = 's' %}
-	{{ mivar }}
-	{{ 'LOWER' | lower }}
-	<a a href="{{ path('productos') }}">Productos</a>
-	<a a href="{{ path('almacen') }}">Almacén</a>
 {% endblock %}
