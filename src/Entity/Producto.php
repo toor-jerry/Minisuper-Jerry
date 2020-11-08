@@ -8,9 +8,15 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\ProductoRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Uuid;
+
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=ProductoRepository::class)
+ * 
+ * @Vich\Uploadable
  * 
  * @ApiResource(
  *     collectionOperations={"get"={"normalization_context"={"groups"="producto:list"}}, "post"},
@@ -75,8 +81,21 @@ class Producto
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
-    private $imagenNombre;
+    private $image;
+
+    /**
+     * @Vich\UploadableField(mapping="productos_images", fileNameProperty="image")
+     * @var File
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="datetime",nullable=true)
+     * @var \DateTime
+     */
+    private $updatedAt;
     
     public function __contruct(
         string $nombre = null, 
@@ -174,15 +193,34 @@ class Producto
         return $this;
     }
 
-    public function getImagenNombre(): ?string
+
+    public function setImageFile(File $image = null)
     {
-        return $this->imagenNombre;
+        $this->imageFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
+        }
     }
 
-    public function setImagenNombre(?string $imagenNombre): self
+    public function getImageFile()
     {
-        $this->imagenNombre = $imagenNombre;
-
-        return $this;
+        return $this->imageFile;
     }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
 }

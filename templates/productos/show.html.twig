@@ -1,21 +1,30 @@
-{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %} {% block title %}{% endblock %} {% block body %}
 
-{% block title %}{% endblock %}
-
-{% block body %}
-
-	{% if producto %}
-	    {% if producto.imagenNombre %}
-		    <img src="{{ asset('img/' ~ producto.imagenNombre) }}"/>
-        {% endif %}
-
-		<h4>{{ producto.nombre }}</h4>
-		<small>
-			{{ producto.descripcion }}
-		</small>
-
-		<p>{{ producto.precio }}</p>
-    {% else %}
-	<div>No existe el producto.</div>
+<div class="card mx-auto mt-2" style="width: 25rem;">
+    {% if producto %} {% if producto.image %}
+    <img src="{{ asset('uploads/images/' ~ producto.image) }}" class="card-img-top mx-auto p-2" alt="{{ producto.nombre }}" style="max-width: 250px;" /> {% endif %}
+    <div class="card-body">
+        <h2 class="card-title">{{ producto.nombre }}</h2>
+        <p class="card-text">{{ producto.descripcion }}</p>
+        <div class="row">
+            <div class="col">
+                <p class="card-text font-weight-bold">$ {{ producto.precio }}</p>
+            </div>
+            <div class="col">
+                <p class="card-text font-weight-bold">Existentes: {{ producto.stack }}</p>
+            </div>
+        </div>
+        <p class="card-text"><b>Disponible en: </b>{{ producto.almacen }}</p>
+        <p class="card-text"><b>Código: </b>{{ producto.codigo }}</p>
+    </div>
+</div>
+{% else %}
+<div class="text-center mt-5">
+    <h1>No existen productos por el momento...</h1>
+</div>
 {% endif %}
+<div class="text-center mt-1 mb-5">
+    <a href="{{ path('productos') }}" class="font-weight-bold">Regresar</a>
+    <br>
+</div>
 {% endblock %}

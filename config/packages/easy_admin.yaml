@@ -6,12 +6,15 @@ easy_admin:
    design:
         brand_color: '#1ABC9C'
         menu:
-            - { route: 'home', label: 'Back to the website', icon: 'home' }
+            - { route: 'home', label: 'Ir a la página principal', icon: 'home' }
             - { entity: 'Productos', label: 'Productos', icon: 'blender' }
             - { entity: 'Almacen', label: 'Almacén', icon: 'warehouse' }
             - { entity: 'Admin', permission: 'ROLE_SUPER_ADMIN', label: 'Usuarios', icon: 'user' }
 
    entities:
+      Almacen:
+         class: App\Entity\Almacen
+
       Productos:
          class: App\Entity\Producto
          list:
@@ -20,7 +23,7 @@ easy_admin:
                fields:
                   - nombre
                   - descripcion
-                  - { property: 'imagenNombre', type: 'image'}
+                  - { property: 'image', type: 'image', base_path: '%app.path.productos_images%'  }
                   - { property: 'precio', type: 'number' }
                   - { property: 'stack', type: 'number' }
                   - codigo
@@ -36,7 +39,8 @@ easy_admin:
                   - { property: 'stack', type: 'number'}
                   - codigo
                   - almacen
-                  - { property: 'imagenNombre', type: 'file_upload', type_options: { upload_filename: '[year]-[month]-[day]-[slug]-[uuid].[extension]' } }
+                  # - { property: 'imagenNombre', type: 'file_upload', type_options: { upload_filename: '[year]-[month]-[day]-[slug]-[uuid].[extension]', upload_dir: '%kernel.project_dir%/public/uploads/images', label: 'Imagen' } }
+                  - { property: 'imageFile', type: 'vich_image' }
          new:
                help: 'Cree un producto.'
                fields:
@@ -46,9 +50,21 @@ easy_admin:
                   - { property: 'stack', type: 'number'}
                   - codigo
                   - almacen
-                  - { property: 'imagenNombre', type: 'file_upload', type_options: { upload_filename: '[year]-[month]-[day]-[slug]-[uuid].[extension]' } }
-      Almacen:
-         class: App\Entity\Almacen
+                  # - { property: 'imagenNombre', type: 'file_upload', type_options: { upload_filename: '[year]-[month]-[day]-[slug]-[uuid].[extension]', upload_dir: '%kernel.project_dir%/public/uploads/images', label: 'Imagen'} }
+                  - { property: 'imageFile', type: 'vich_image' }
 
       Admin:
          class: App\Entity\Admin
+         list:
+               help: 'Usuarios.'
+               max_results: 30
+               fields:
+                  - username
+                  - roles
+               sort: ['username', 'DESC']
+               filters: ['username', 'roles']
+         edit:
+               help: 'Actualice un rol usuario<h5><b>Roles disponibles:</b> <br>ROLE_ADMIN<br>ROLE_SUPER_ADMIN</h5>'
+               fields:
+                  - {property: username, type_options: { disabled: true } }
+                  - {property: roles, type: collection, label: Rol, type_options: { prototype_data: 'ROLE_ADMIN', allow_add: false, allow_delete: false} }
